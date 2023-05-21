@@ -102,7 +102,12 @@ public class Bases
      */
     public static String intToOctalString(int octal)
     {
-        return "";
+        String result = "";
+        while (octal > 0) {
+            result = (octal & 7) + result;
+            octal >>= 3;
+        }
+        return result;
     }
 
     /**
