@@ -87,7 +87,11 @@ public class BitVector
      */
     public boolean isSet(int index)
     {
-        return false;
+        if ((bits & (1 << index) != 0) && (index < 32)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -100,7 +104,11 @@ public class BitVector
      */
     public boolean isClear(int index)
     {
-        return false;
+        if ((bits & (1 << index) == 0) && (index >= 32)) {
+            return true
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -109,7 +117,13 @@ public class BitVector
      */
     public int onesCount()
     {
-        return 0;
+        int count = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((bits & (1 << i) != 0)) {
+                count++:
+            }
+        }
+        return count;
     }
 
     /**
@@ -118,7 +132,13 @@ public class BitVector
      */
     public int zerosCount()
     {
-        return 0;
+        int count = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((bits & (1 << i) == 0)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -130,6 +150,11 @@ public class BitVector
      */
     public int size()
     {
-        return 0;
+        for (int i = 31; i >= 0; i--) {
+            if ((bits & (1 << i) != 0)) {
+                return i + 1;
+            }
+        }
+        return 1;
     }
 }
