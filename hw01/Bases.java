@@ -43,7 +43,14 @@ public class Bases
      */
     public static int binaryStringToInt(String binary)
     {
-        return 0;
+        int total = 0;
+        int length = binary.length();
+        for (int i = length; i > 0; i--) {
+            if (binary.charAt(length - i) == '1') {
+                total += (1 << i - 1);
+            }
+        }
+        return total;
     }
 
     /**
@@ -58,7 +65,15 @@ public class Bases
      */
     public static int decimalStringToInt(String decimal)
     {
-        return 0;
+        int total = 0;
+        int length = decimal.length();
+        int multiply = 1;
+        
+        for (int i = length - 1; i >= 0; i--) {
+            total += multiply * (decimal.charAt(i) - '0');
+            multiply *= 10;
+        }
+        return total;
     }
 
     /**

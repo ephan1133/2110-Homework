@@ -62,7 +62,7 @@ public class BitVector
     public void clear(int index)
     {
         // could also be ~1 but not sure
-        bits = bits & (0 << index);
+        bits = bits & ~(1 << index);
     }
 
     /**
@@ -87,11 +87,7 @@ public class BitVector
      */
     public boolean isSet(int index)
     {
-        if ((bits & (1 << index) != 0) && (index < 32)) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((bits & (1 << index)) != 0) && (index < 32);
     }
 
     /**
@@ -104,11 +100,7 @@ public class BitVector
      */
     public boolean isClear(int index)
     {
-        if ((bits & (1 << index) == 0) && (index >= 32)) {
-            return true
-        } else {
-            return false;
-        }
+        return ((bits & (1 << index)) == 0) || (index >= 32);
     }
 
     /**
@@ -119,8 +111,8 @@ public class BitVector
     {
         int count = 0;
         for (int i = 0; i < 32; i++) {
-            if ((bits & (1 << i) != 0)) {
-                count++:
+            if ((bits & (1 << i)) != 0) {
+                count++;
             }
         }
         return count;
@@ -134,7 +126,7 @@ public class BitVector
     {
         int count = 0;
         for (int i = 0; i < 32; i++) {
-            if ((bits & (1 << i) == 0)) {
+            if ((bits & (1 << i)) == 0) {
                 count++;
             }
         }
@@ -151,7 +143,7 @@ public class BitVector
     public int size()
     {
         for (int i = 31; i >= 0; i--) {
-            if ((bits & (1 << i) != 0)) {
+            if ((bits & (1 << i)) != 0) {
                 return i + 1;
             }
         }
