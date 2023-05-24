@@ -2,7 +2,7 @@
  * CS 2110 Summer 2023 HW1
  * Part 3 - Coding with bitwise operators
  *
- * @author YOUR NAME HERE
+ * @author Eric Phan
  *
  * Global rules for this file:
  * - All of these functions must be completed in ONE line. That means they

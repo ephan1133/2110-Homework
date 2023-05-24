@@ -86,7 +86,17 @@ public class Bases
      */
     public static int hexStringToInt(String hex)
     {
-        return 0;
+        int result = 0;
+        int length = hex.length();
+        for (int i = 0; i < length; i++) {
+            result <<= 4;
+            if (hex.charAt(i) <= 57) {
+                result += hex.charAt(i) - 48;
+            } else {
+                result += hex.charAt(i) - 55;
+            }
+        }
+        return result;
     }
 
     /**
@@ -126,6 +136,27 @@ public class Bases
      */
     public static String binaryStringToHexString(String binary)
     {
-        return "";
+        int binaryValue = 0;
+        int length = binary.length();
+        for (int i = length; i > 0; i--) {
+            if (binary.charAt(length - i) == '1') {
+                binaryValue += (1 << i - 1);
+            }
+        }
+        
+        String result = "";
+
+        int setsOfFour = 8;
+        while (setsOfFour != 0) {
+            int value = binaryValue & 15;
+            if (value + 48 <= 57) {
+                result = (char) (value + 48) + result;
+            } else {
+                result = (char) (value + 55) + result;
+            }
+            setsOfFour--;
+            binaryValue >>= 4;
+        }
+        return result;
     }
 }
