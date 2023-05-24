@@ -149,7 +149,7 @@ public class Operations
      */
     int bitRange(int num, int s, int n)
     {
-        return 0;
+        return (num >> s) & ~(~0 << n);
     }
 
     /**
@@ -169,9 +169,9 @@ public class Operations
      */
     int xnor(int num1, int num2)
     {
-        return 0;
+        return ~((num1 & ~num2) | (num2 & ~num1));
     }
-
+    
     /**
      * Return true if the given number is a multiple of 2.
      *
@@ -187,7 +187,7 @@ public class Operations
 
     boolean multipleOf2(int num)
     {
-        return false;
+        return (num & 1) == 0;
     }
 
     /**
@@ -207,7 +207,7 @@ public class Operations
 
     boolean multipleOf8(int num)
     {
-        return false;
+        return (num & 7) == 0;
     }
 
     /**
@@ -232,6 +232,6 @@ public class Operations
 
     boolean powerOf2(int num)
     {
-        return false;
+        return (num & (num - 1)) == 0 && num != 0 && num != -2147483648;
     }
 }

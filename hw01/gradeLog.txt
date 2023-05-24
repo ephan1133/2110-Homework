@@ -1,3 +1,20 @@
+Operations.java: 
+	getShort: 5.0/5.0
+	setByte: 5.0/5.0
+	pack: 5.0/5.0
+	bitRange: 5.0/5.0
+	xnor: 5.0/5.0
+	multipleOf2: 3.0/3.0
+	multipleOf8: 3.0/3.0
+	powerOf2: 4.0/4.0
+	Perfect!
+Bases.java: 
+	binaryStringToInt: 5.0/5.0
+	decimalStringToInt: 5.0/5.0
+	hexStringToInt: 5.0/5.0
+	intToOctalString: 5.0/5.0
+	binaryStringToHexString: 5.0/5.0
+	Perfect!
 BitVector.java: 
 	set: 5.0/5.0
 	clear: 5.0/5.0
@@ -8,48 +25,4 @@ BitVector.java:
 	zerosCount: 5.0/5.0
 	size: 5.0/5.0
 	Perfect!
-Operations.java: 
-	getShort: 5.0/5.0
-	setByte: 5.0/5.0
-	pack: 5.0/5.0
-	bitRange: 0.0/5.0
-		[fail] Failed test case for method bitRange. Arguments [2147483647, 0, 31]; Expected return value: 2147483647; Actual: 0
-		[fail] Failed test case for method bitRange. Arguments [22161, 0, 8]; Expected return value: 145; Actual: 0
-		[fail] Failed test case for method bitRange. Arguments [4552329, 8, 8]; Expected return value: 118; Actual: 0
-		[fail] Failed test case for method bitRange. Arguments [-858993460, 15, 9]; Expected return value: 409; Actual: 0
-		(-0.0) Violations:
-			Method not implemented
-	xnor: 0.0/5.0
-		[fail] Failed test case for method xnor. Arguments [305419896, -2023406815]; Expected return value: 1789848230; Actual: 0
-		[fail] Failed test case for method xnor. Arguments [858993459, 1431655765]; Expected return value: -1717986919; Actual: 0
-		[fail] Failed test case for method xnor. Arguments [-1161901314, -1091576147]; Expected return value: -72422484; Actual: 0
-		(-1.25) Violations:
-			Method not implemented
-	multipleOf2: 0.0/3.0
-		[fail] Failed test case for method multipleOf2. Arguments [0]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf2. Arguments [8]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf2. Arguments [518]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf2. Arguments [-268435456]; Expected return value: true; Actual: false
-		(-1.5) Violations:
-			Method not implemented
-	multipleOf8: 0.0/3.0
-		[fail] Failed test case for method multipleOf8. Arguments [67109000]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf8. Arguments [0]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf8. Arguments [-268435456]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf8. Arguments [1456]; Expected return value: true; Actual: false
-		(-1.5) Violations:
-			Method not implemented
-	powerOf2: 0.0/4.0
-		[fail] Failed test case for method powerOf2. Arguments [1]; Expected return value: true; Actual: false
-		[fail] Failed test case for method powerOf2. Arguments [4194304]; Expected return value: true; Actual: false
-		[fail] Failed test case for method powerOf2. Arguments [16384]; Expected return value: true; Actual: false
-		(-2.5) Violations:
-			Method not implemented
-Bases.java: 
-	binaryStringToInt: 5.0/5.0
-	decimalStringToInt: 5.0/5.0
-	hexStringToInt: 5.0/5.0
-	intToOctalString: 5.0/5.0
-	binaryStringToHexString: 5.0/5.0
-	Perfect!
-Final Grade: 80.0/100.0
+Final Grade: 100.0/100.0
