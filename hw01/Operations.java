@@ -75,6 +75,7 @@ public class Operations
      */
     int getShort(int num, int which)
     {
+        int result = 0x0;
         return 0;
     }
 
