@@ -11,45 +11,38 @@ BitVector.java:
 Operations.java: 
 	getShort: 5.0/5.0
 	setByte: 5.0/5.0
-	pack: 0.0/5.0
-		[fail] Failed test case for method pack. Arguments [68, 255, 151]; Expected return value: 4521879; Actual: 0
-		[fail] Failed test case for method pack. Arguments [35175, 69, 35]; Expected return value: -1989720797; Actual: 0
-		[fail] Failed test case for method pack. Arguments [57007, 145, 131]; Expected return value: -558919293; Actual: 0
-		[fail] Failed test case for method pack. Arguments [48879, 202, 254]; Expected return value: -1091581186; Actual: 0
-		[fail] Failed test case for method pack. Arguments [48623, 192, 3]; Expected return value: -1108361213; Actual: 0
-		(-0.0) Violations:
-			Method not implemented
+	pack: 5.0/5.0
 	bitRange: 0.0/5.0
-		[fail] Failed test case for method bitRange. Arguments [22161, 0, 8]; Expected return value: 145; Actual: 0
-		[fail] Failed test case for method bitRange. Arguments [-858993460, 15, 9]; Expected return value: 409; Actual: 0
 		[fail] Failed test case for method bitRange. Arguments [2147483647, 0, 31]; Expected return value: 2147483647; Actual: 0
+		[fail] Failed test case for method bitRange. Arguments [22161, 0, 8]; Expected return value: 145; Actual: 0
 		[fail] Failed test case for method bitRange. Arguments [4552329, 8, 8]; Expected return value: 118; Actual: 0
+		[fail] Failed test case for method bitRange. Arguments [-858993460, 15, 9]; Expected return value: 409; Actual: 0
 		(-0.0) Violations:
 			Method not implemented
 	xnor: 0.0/5.0
-		[fail] Failed test case for method xnor. Arguments [-1161901314, -1091576147]; Expected return value: -72422484; Actual: 0
-		[fail] Failed test case for method xnor. Arguments [858993459, 1431655765]; Expected return value: -1717986919; Actual: 0
 		[fail] Failed test case for method xnor. Arguments [305419896, -2023406815]; Expected return value: 1789848230; Actual: 0
+		[fail] Failed test case for method xnor. Arguments [858993459, 1431655765]; Expected return value: -1717986919; Actual: 0
+		[fail] Failed test case for method xnor. Arguments [-1161901314, -1091576147]; Expected return value: -72422484; Actual: 0
 		(-1.25) Violations:
 			Method not implemented
 	multipleOf2: 0.0/3.0
 		[fail] Failed test case for method multipleOf2. Arguments [0]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf2. Arguments [-268435456]; Expected return value: true; Actual: false
 		[fail] Failed test case for method multipleOf2. Arguments [8]; Expected return value: true; Actual: false
 		[fail] Failed test case for method multipleOf2. Arguments [518]; Expected return value: true; Actual: false
+		[fail] Failed test case for method multipleOf2. Arguments [-268435456]; Expected return value: true; Actual: false
 		(-1.5) Violations:
 			Method not implemented
 	multipleOf8: 0.0/3.0
-		[fail] Failed test case for method multipleOf8. Arguments [-268435456]; Expected return value: true; Actual: false
-		[fail] Failed test case for method multipleOf8. Arguments [0]; Expected return value: true; Actual: false
 		[fail] Failed test case for method multipleOf8. Arguments [67109000]; Expected return value: true; Actual: false
+		[fail] Failed test case for method multipleOf8. Arguments [0]; Expected return value: true; Actual: false
+		[fail] Failed test case for method multipleOf8. Arguments [-268435456]; Expected return value: true; Actual: false
 		[fail] Failed test case for method multipleOf8. Arguments [1456]; Expected return value: true; Actual: false
 		(-1.5) Violations:
 			Method not implemented
 	powerOf2: 0.0/4.0
-		[fail] Failed test case for method powerOf2. Arguments [16384]; Expected return value: true; Actual: false
-		[fail] Failed test case for method powerOf2. Arguments [4194304]; Expected return value: true; Actual: false
 		[fail] Failed test case for method powerOf2. Arguments [1]; Expected return value: true; Actual: false
+		[fail] Failed test case for method powerOf2. Arguments [4194304]; Expected return value: true; Actual: false
+		[fail] Failed test case for method powerOf2. Arguments [16384]; Expected return value: true; Actual: false
 		(-2.5) Violations:
 			Method not implemented
 Bases.java: 
@@ -59,4 +52,4 @@ Bases.java:
 	intToOctalString: 5.0/5.0
 	binaryStringToHexString: 5.0/5.0
 	Perfect!
-Final Grade: 75.0/100.0
+Final Grade: 80.0/100.0

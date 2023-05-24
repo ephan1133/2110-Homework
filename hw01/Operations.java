@@ -128,7 +128,7 @@ public class Operations
      */
     int pack(int s2, int b1, int b0)
     {
-        return 0;
+        return (s2 << (1 << 4)) | (b1 << (1 << 3)) | (b0);
     }
 
     /**
