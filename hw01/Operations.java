@@ -75,8 +75,7 @@ public class Operations
      */
     int getShort(int num, int which)
     {
-        int result = 0x0;
-        return 0;
+        return (num >> (which << 4)) & 65535;
     }
 
     /**
@@ -108,7 +107,7 @@ public class Operations
      */
     int setByte(int num, int a_byte, int which)
     {
-        return 0;
+        return (num & ~(0xFF << (which << 3))) | (a_byte << (which << 3));
     }
 
     /**
