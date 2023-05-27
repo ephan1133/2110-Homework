@@ -50,7 +50,7 @@ public class BitVector
      */
     public void set(int index)
     {
-        bits = bits | (1 << index);
+        bits |= (1 << index);
     }
 
     /**
@@ -62,7 +62,7 @@ public class BitVector
     public void clear(int index)
     {
         // could also be ~1 but not sure
-        bits = bits & ~(1 << index);
+        bits &= ~(1 << index);
     }
 
     /**
@@ -74,7 +74,7 @@ public class BitVector
      */
     public void toggle(int index)
     {
-        bits = bits ^ (1 << index);
+        bits ^= (1 << index);
     }
 
     /**
