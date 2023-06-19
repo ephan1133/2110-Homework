@@ -1,0 +1,21 @@
+.orig x0000
+LD R0, MYLABEL
+JIR R0, 100
+ADD R1, R1, 10
+ADD R2, R2, 10
+ADD R3, R3, 10
+ADD R4, R4, 10
+ADD R5, R5, 10
+ADD R6, R6, 10
+AND R7, R7, 0
+ADD R7, R7, 10
+HALT
+MYLABEL .fill x0006
+ADDR    .fill x0008
+.end
+
+.orig x0069
+.fill x000c
+.end
+
+;; R0 = x0006, R1 = x0000, R2 = x0000, R3 = x0000, R4 = x0000, R5 = x0000, R6 = x0000, R7 = x000a
