@@ -26,65 +26,50 @@
 
 .orig x3000
 	;; YOUR CODE HERE
-	LD R0, LENGTH ;; length = 3
-	LD R1, #0 ;; i = 0
-	LD R2, A ;; the address of A[0]
-	LD R3, B ;; the address of B[0]
-	LD R4, C ;; the address of C[0]
+	LD R0, A ;; address of a[0]
+	LD R1, B ;; address of b[0]
+	LD R2, C ;; address of c[0]
+	LD R3, LENGTH ;; R3 = 3 (length)
+	AND R4, R4, #0 ;; R4 = 0 (i)
 
 	WLOOP
-		NOT R0, R0
-		ADD R0, R0, #1 ;; -length
-		ADD R5, R0, R1 ;; i - length
-		BRzp STOP
-
-		LDR R2, R2, #0 ;; A[i] 
-		LDR R3, R3, #0 ;; B[i]
-
-		NOT R3, R3
-		ADD R3, R3, #1 ;; -B[i]
-
-		ADD R2, R2, R3 ;; A[i] - B[i]
-		BRnz ASSIGN_ONE
-		BRp ASSIGN_ZERO
-		ADD R1, R1, #1
-		BRnzp WLOOP
-
-		ASSIGN_ONE
-		LD R6, LENGTH
+		NOT R5, R3
+		ADD R5, R5, #1 ;; R5 = -length
+		ADD R5, R4, R5 ;; i - length
+		BRzp ENDWLOOP
+		ADD R0, R0, R4 ;; address of a[i]
+		ADD R1, R1, R4 ;; address of b[i]
+		LDR R0, R0, #0 ;; data at a[i]
+		LDR R1, R1, #0 ;; data at b[i]
 		NOT R1, R1
-		ADD R1, R1, #1 ;; -i
-		ADD R6, R6, R1
-		ADD R6, R6, #-1 ;; [length - i - 1]
-		
-		ADD R4, R4, R6 ;; C[length - i - 1]
+		ADD R1, R1, #1 ;; R1 = -b[i]
+		AND R6, R6, #0 ;; R6 = 0
+		ADD R6, R0, R1 ;; a[i] - b[i]
+		BRp ELSE
+		AND R7, R7, #0 ;; R7 = 0
+		ADD R7, R7, #1 ;; R7 = 1
+		NOT R6, R4 
+		ADD R6, R6, #1 ;; R6 = -i
+		ADD R6, R6, #-1 ;; R6 = -i - 1
+		ADD R6, R3, R6 ;; R6 = length - i - 1
+		ADD R2, R2, R6 ;; address of c[length - i - 1]
+		STR, R7, R2, #0
+		ADD R4, R4, #1 ;; R4 = i++
+		BR WLOOP
 
-		;; clear R6 so i can put #1 into R6 and store it 
-		AND R6, R6, #0 ;; clears R6
-		LD R6, #1 ;; loads #1 into R6
-		STR R6, R4, #0 ;; C[length - i - 1] = 1
-		
-		NOT R1, R1
-		ADD R1, R1, #1 ;; +i
+		ELSE
+		AND R7, R7, #0 ;; R7 = 0
+		NOT R6, R4 
+		ADD R6, R6, #1 ;; R6 = -i
+		ADD R6, R6, #-1 ;; R6 = -i - 1
+		ADD R6, R3, R6 ;; R6 = length - i - 1
+		ADD R2, R2, R6 ;; address of c[length - i - 1]
+		STR, R7, R2, #0
 
-		ASSIGN_ZERO
-		LD R6, LENGTH
-		NOT R1, R1
-		ADD R1, R1, #1 ;; -i
-		ADD R6, R6, R1
-		ADD R6, R6, #-1 ;; [length - i - 1]
-		
-		ADD R4, R4, R6 ;; C[length - i - 1]
-
-		AND R6, R6, #0 ;; clears R6
-		LD R6, #0 ;; loads #0 into R6
-		STR R6, R4, #0 ;; C[length - i - 1] = 1
-		
-		NOT R1, R1
-		ADD R1, R1, #1 ;; +i
-
-		STOP
+		ENDWLOOP
 		HALT
+
+	HALT
 
 ;; Do not change these addresses! 
 ;; We populate A and B and reserve space for C at these specific addresses in the orig statements below.
