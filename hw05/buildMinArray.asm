@@ -53,7 +53,7 @@
 		ADD R6, R6, #-1 ;; R6 = -i - 1
 		ADD R6, R3, R6 ;; R6 = length - i - 1
 		ADD R2, R2, R6 ;; address of c[length - i - 1]
-		STR, R7, R2, #0
+		STR R7, R2, #0 ;; Stores 1 into R2
 		ADD R4, R4, #1 ;; R4 = i++
 		BR WLOOP
 
@@ -64,7 +64,9 @@
 		ADD R6, R6, #-1 ;; R6 = -i - 1
 		ADD R6, R3, R6 ;; R6 = length - i - 1
 		ADD R2, R2, R6 ;; address of c[length - i - 1]
-		STR, R7, R2, #0
+		STR R7, R2, #0 ;; Stores 0 into R2
+		ADD R4, R4, #1 ;; R4 = i++
+		BR WLOOP
 
 		ENDWLOOP
 		HALT
