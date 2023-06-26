@@ -11,67 +11,62 @@
 ;;	int A[] = {-4, 6, 0};
 ;;	int B[] = {1, 5, 2};
 ;;	int C[3];
-;;	int length = 3;
+;;	int length = 3; -> length = 2
 ;;
 ;;	int i = 0;
-;;	while (i < length) {
-;;		if (A[i] <= B[i]) {
-;;			C[length - i - 1] = 1;
+;;	while (i < length) { -> (length + 1 > 0)
+;;		if (A[i] <= B[i]) { -> A[length] <= B[length]
+;;			C[length - i - 1] = 1; -> C[i] = 1
 ;;		}
 ;;		else {
-;;			C[length - i - 1] = 0;
+;;			C[length - i - 1] = 0; -> C[i] = 0
 ;;		}
+;;		length-- 
 ;;		i++;
 ;;	}
 
 .orig x3000
 	;; YOUR CODE HERE
-	LD R0, A ;; address of a[0]
-	LD R1, B ;; address of b[0]
-	LD R2, C ;; address of c[0]
-	LD R3, LENGTH ;; R3 = 3 (length)
-	AND R4, R4, #0 ;; R4 = 0 (i)
+	LD R0, LENGTH ;; R0 = length
+	ADD R0, R0, #-1 ;; R0 = 2 (length - 1)
+	AND R1, R1, #0 ;; clears R1, R1 = 0
 
 	WLOOP
-		NOT R5, R3
-		ADD R5, R5, #1 ;; R5 = -length
-		ADD R5, R4, R5 ;; i - length
-		BRzp ENDWLOOP
-		ADD R0, R0, R4 ;; address of a[i]
-		ADD R1, R1, R4 ;; address of b[i]
-		LDR R0, R0, #0 ;; data at a[i]
-		LDR R1, R1, #0 ;; data at b[i]
-		NOT R1, R1
-		ADD R1, R1, #1 ;; R1 = -b[i]
-		AND R6, R6, #0 ;; R6 = 0
-		ADD R6, R0, R1 ;; a[i] - b[i]
-		BRp ELSE
-		AND R7, R7, #0 ;; R7 = 0
-		ADD R7, R7, #1 ;; R7 = 1
-		NOT R6, R4 
-		ADD R6, R6, #1 ;; R6 = -i
-		ADD R6, R6, #-1 ;; R6 = -i - 1
-		ADD R6, R3, R6 ;; R6 = length - i - 1
-		ADD R2, R2, R6 ;; address of c[length - i - 1]
-		STR R7, R2, #0 ;; Stores 1 into R2
-		ADD R4, R4, #1 ;; R4 = i++
-		BR WLOOP
+	; ADD R0, R0, #1 ;; length + 1
+	; BRnz ENDWLOOP
+	LD R2, A ;; address of a[0]
+	ADD R2, R2, R0 ;; address of a[length]
+	LD R3, B ;; address of b[0]
+	ADD R3, R3, R0 ;; address of b[length]
+	LDR R2, R2, #0 ;; data at a[length]
+	LDR R3, R3, #0 ;; data at b[length]
+	NOT R3, R3 ;; not b[length]
+	ADD R3, R3, #1 ;; -b[length]
+	ADD R2, R2, R3 ;; a[length] - b[length]
+	BRp ELSE
+	AND R3, R3, #0
+	ADD R3, R3, #1 ;; 1 value to store in C
+	BR STORE_C_VALUE
 
-		ELSE
-		AND R7, R7, #0 ;; R7 = 0
-		NOT R6, R4 
-		ADD R6, R6, #1 ;; R6 = -i
-		ADD R6, R6, #-1 ;; R6 = -i - 1
-		ADD R6, R3, R6 ;; R6 = length - i - 1
-		ADD R2, R2, R6 ;; address of c[length - i - 1]
-		STR R7, R2, #0 ;; Stores 0 into R2
-		ADD R4, R4, #1 ;; R4 = i++
-		BR WLOOP
+	ELSE
+	AND R3, R3, #0 ;; 0 value to store in C
+	BR STORE_C_VALUE
 
-		ENDWLOOP
-		HALT
+	STORE_C_VALUE
+	LD R2, C ;; address of c[0]
+	ADD R2, R2, R1 ;; address of c[i]
+	STR R3, R2, #0 ;; stores R3 value (0 or 1) into c[i]
+	BR END_IF
 
+	END_IF
+	ADD R1, R1, #1 ;; i++
+	ADD R0, R0, #-1 ;; length--
+	BRzp WLOOP
 	HALT
+
+	ENDWLOOP
+	HALT
+
 
 ;; Do not change these addresses! 
 ;; We populate A and B and reserve space for C at these specific addresses in the orig statements below.
