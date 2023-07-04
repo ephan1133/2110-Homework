@@ -2,7 +2,7 @@
 ;;  CS 2110 - Spring 2023
 ;;  Homework 6 - Insertion Sort
 ;;=============================================================
-;;  Name:
+;;  Name: Eric Phan
 ;;============================================================
 
 ;;  In this file, you must implement the 'INSERTION_SORT' subroutine.
@@ -53,6 +53,91 @@
 INSERTION_SORT ;; Do not change this label! Treat this as like the name of the function in a function header
     ;; Code your implementation for the INSERTION_SORT subroutine here!
     ;; NOTE: Your implementation MUST be done recursively
+    ;; buildup
+    ADD R6, R6, #-4 ;; Allocate Space
+    STR R7, R6, #2  ;; Save Ret Addr
+    STR R5, R6, #1  ;; Save Old FP
+    ADD R5, R6, #0  ;; Set New FP
+    ADD R6, R6, #-6  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
+    STR R0, R6, #0  ;; Save R0
+    STR R1, R6, #1  ;; Save R1
+    STR R2, R6, #2  ;; Save R2
+    STR R3, R6, #3  ;; Save R3
+    STR R4, R6, #4  ;; Save R4
+
+    ;; code
+    LDR R0, R5, #4 ;; R0 = arr
+    LDR R1, R5, #5 ;; R1 = length
+    ADD R2, R1, #-1 ;; length - 1
+    ;; checks condition length - 1 <= 0 
+    BRp END_IF
+    BR TEARDOWN
+
+    END_IF
+    ;; start the function call
+    ADD R6, R6, #-2 ;; pushing space for arguments
+    STR R0, R6, #0 ;; pushing 1st arg (arr) onto stack
+    STR R2, R6, #1 ;; pushing second arg (length - 1) onto stack
+    JSR INSERTION_SORT ;; calling method again
+    ;; don't store a value because it returns null
+    ADD R6, R6, #3 ;; popping arguments and return value
+
+    ;; int last_element = arr[length - 1];
+    AND R3, R3, #0 ;; setting R3 = 0
+    ADD R3, R0, R2 ;; R3 = address for arr[length - 1]
+    LDR R3, R3, #0 ;; value of arr[length - 1]
+    STR R3, R5, #0 ;; last_element = arr[length - 1]
+
+    ;; int n = length - 2
+    AND R3, R3, #0 ;; setting R3 = 0
+    ADD R3, R2, #-1 ;; R3 = length - 2
+    STR R3, R5, #-1 ;; n = length - 2
+
+    ;; while loop
+    WHILE
+    ;; n >= 0 condition
+    LDR R3, R5, #-1 ;; R3 = n
+    BRn END_WHILE
+    ;; arr[n] > last_element -> arr[n] - last_element > 0
+    LDR R3, R5, #-1 ;; R3 = n
+    ADD R3, R3, R0 ;; R3 = arr[n] address
+    LDR R3, R3, #0 ;; R3 = arr[n] value
+    LDR R4, R5, #0 ;; R4 = last_element
+    NOT R4, R4
+    ADD R4, R4, #1 ;; R4 = -last_element
+    ADD R3, R3, R4 ;; arr[n] - last_element
+    BRnz END_WHILE
+    ;; arr[n + 1] = arr[n]
+    LDR R3, R5, #-1 ;; R3 = n
+    ADD R3, R3, R0 ;; R3 = arr[n] address
+    LDR R4, R3, #0 ;; R4 = arr[n] value
+    STR R4, R3, #1 ;; arr[n + 1] = arr[n]
+    ;; n--
+    LDR R3, R5, #-1 ;; R3 = n
+    ADD R3, R3, #-1 ;; R3 = n - 1
+    STR R3, R5, #-1 ;; n = n - 1 ;; maybe no need this line
+    BR WHILE
+
+    END_WHILE
+    ;; arr[n + 1] = last_element
+    LDR R3, R5, #-1 ;; R3 = n
+    ADD R3, R3, #1 ;; R3 = n + 1
+    ADD R3, R3, R0 ;; R3 = arr[n + 1] address
+    LDR R4, R5, #0 ;; R4 = last_element
+    STR R4, R3, #0 ;; arr[n + 1] = last_element
+     
+
+    ;; teardown
+    TEARDOWN
+    LDR R0, R6, #0 ;; Restore R0
+    LDR R1, R6, #1 ;; Restore R1
+    LDR R2, R6, #2 ;; Restore R2
+    LDR R3, R6, #3 ;; Restore R3
+    LDR R4, R6, #4 ;; Restore R4
+    ADD R6, R5, #0 ;; Pop Saved Regs and LVs
+    LDR R5, R6, #1 ;; Restore Old FP
+    LDR R7, R6, #2 ;; Restore Ret Addr
+    ADD R6, R6, #3 ;; Pop All But Ret Val
     RET
 
 ;; Needed to Simulate Subroutine Call in Complx

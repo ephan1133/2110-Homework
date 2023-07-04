@@ -43,6 +43,47 @@
 
 MULTIPLY ;; Do not change this label! Treat this as like the name of the function in a function header
     ;; Code your implementation for the MULTIPLY subroutine here!
+    ADD R6, R6, #-4
+    STR R7, R6, #2
+    STR R5, R6, #1
+    ADD R5, R6, #0
+    ADD R6, R6, #-5 ;; SET X TO -4 - NUM LVs OR -5 IF NO LVs
+    STR R0, R6, #0
+    STR R1, R6, #1
+    STR R2, R6, #2
+    STR R3, R6, #3
+    STR R4, R6, #4
+
+    ;; body of code
+    AND R0, R0, #0 ;; R0 = 0
+    STR R0, R5, #0 ;; ret = 0
+    WLOOP
+        LDR R0, R5, #5 ;; R0 = b
+        BRnz ENDWLOOP
+        LDR R0, R5, #0 ;; R0 = ret
+        LDR R1, R5, #4 ;; R1 = a
+        ADD R0, R0, R1 ;; R0 = ret + a
+        STR R0, R5, #0 ;; ret = R0
+
+        LDR R0, R5, #5 ;; R0 = b
+        ADD R0, R0, #-1 ;; R0 -= 1
+        STR R0, R5, #5 ;; b = R0
+        BR WLOOP
+
+    ENDWLOOP
+        LDR R0, R5, #0 ;; R0 = ret
+        STR R0, R5, #3 ;; return value = ret
+
+    LDR R0, R6, #0
+    LDR R1, R6, #1
+    LDR R2, R6, #2
+    LDR R3, R6, #3
+    LDR R4, R6, #4
+    ADD R6, R5, #0
+    LDR R5, R6, #1
+    LDR R7, R6, #2
+    ADD R6, R6, #3
+
     RET
 
 ;;  FACTORIAL Pseudocode (see PDF for explanation and examples)
@@ -57,6 +98,59 @@ MULTIPLY ;; Do not change this label! Treat this as like the name of the functio
 
 FACTORIAL ;; Do not change this label! Treat this as like the name of the function in a function header
     ;; Code your implementation for the FACTORIAL subroutine here!
+    ;; buildup
+    ADD R6, R6, #-4 ;; Allocate Space
+    STR R7, R6, #2  ;; Save Ret Addr
+    STR R5, R6, #1  ;; Save Old FP
+    ADD R5, R6, #0  ;; Set New FP
+    ADD R6, R6, #-6  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
+    STR R0, R6, #0  ;; Save R0
+    STR R1, R6, #1  ;; Save R1
+    STR R2, R6, #2  ;; Save R2
+    STR R3, R6, #3  ;; Save R3
+    STR R4, R6, #4  ;; Save R4
+
+    ;; body of subroutine
+    AND R0, R0, #0 ;; R0 = 0
+    ADD R0, R0, #1 ;; R0 = 1
+    STR R0, R5, #0 ;; ret = 1
+    AND R0, R0, #0 ;; R0 = 0
+    ADD R0, R0, #2 ;; R0 = 2
+    STR R0, R5, #-1 ;; x = 2
+    FORLOOP
+        LDR R0, R5, #-1 ;; R1 = x
+        LDR R1, R5, #4 ;; R1 = n
+        NOT R1, R1 ;; not R1
+        ADD R1, R1, #1 ;; -n
+        ADD R0, R0, R1 ;; 2 - n
+        BRp ENDFORLOOP
+        LDR R0, R5, #0 ;; R0 = ret
+        LDR R1, R5, #-1 ;; R1 = x
+        ADD R6, R6, #-2 ;; push space for 2 arguments
+        STR R0, R6, #0 ;; 1st argument = ret
+        STR R1, R6, #1 ;; 2nd argument = x
+        JSR MULTIPLY ;; calls multipy(ret, x)
+        LDR R0, R6, #0 ;; R0 = multiply(ret, x)
+        ADD R6, R6, #3 ;; soft pop
+        STR R0, R5, #0 ;; ret = multiplfy(ret, x)
+        LDR R0, R5, #-1 ;; R0 = x
+        ADD R0, R0, #1 ;; R0++
+        STR R0, R5, #-1 ;; x = x + 1
+        BR FORLOOP
+    ENDFORLOOP
+        LDR R0, R5, #0 ;; R0 = ret
+        STR R0, R5, #3 ;; return value = ret
+
+    ;; teardown
+    LDR R0, R6, #0 ;; Restore R0
+    LDR R1, R6, #1 ;; Restore R1
+    LDR R2, R6, #2 ;; Restore R2
+    LDR R3, R6, #3 ;; Restore R3
+    LDR R4, R6, #4 ;; Restore R4
+    ADD R6, R5, #0 ;; Pop Saved Regs and LVs
+    LDR R5, R6, #1 ;; Restore Old FP
+    LDR R7, R6, #2 ;; Restore Ret Addr
+    ADD R6, R6, #3 ;; Pop All But Ret Val
     RET
 
 ;; Needed to Simulate Subroutine Call in Complx

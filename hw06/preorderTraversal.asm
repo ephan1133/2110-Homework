@@ -2,7 +2,7 @@
 ;;  CS 2110 - Spring 2023
 ;;  Homework 6 - Preorder Traversal
 ;;=============================================================
-;;  Name:
+;;  Name: Eric Phan
 ;;============================================================
 
 ;;  In this file, you must implement the 'PREORDER_TRAVERSAL' subroutine.
@@ -51,6 +51,81 @@
 
 PREORDER_TRAVERSAL ;; Do not change this label! Treat this as like the name of the function in a function header
     ;; Code your implementation for the PREORDER_TRAVERSAL subroutine here!
+    ;; buildup 
+    ADD R6, R6, #-4 ;; Allocate Space
+    STR R7, R6, #2  ;; Save Ret Addr
+    STR R5, R6, #1  ;; Save Old FP
+    ADD R5, R6, #0  ;; Set New FP
+    ADD R6, R6, #-5  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
+    STR R0, R6, #0  ;; Save R0
+    STR R1, R6, #1  ;; Save R1
+    STR R2, R6, #2  ;; Save R2
+    STR R3, R6, #3  ;; Save R3
+    STR R4, R6, #4  ;; Save R4
+
+    ;; body of code
+    ;; if (root == 0)
+    LDR R0, R5, #4 ;; R0 = root
+    ADD R0, R0, #0 ;; add nothing to check condition code
+    BRnp END_IF
+    ;; return index
+    LDR R0, R5, #6 ;; R0 = index
+    STR R0, R5, #3 ;; return value = index
+    BR TEARDOWN
+
+    END_IF
+    ;; arr[index] = root.data
+    LDR R0, R5, #5 ;; R0 = arr
+    LDR R1, R5, #6 ;; R1 = index
+    ADD R0, R0, R1 ;; R0 arr[index] address
+    LDR R1, R5, #4 ;; R1 = root
+    LDR R1, R1, #0 ;; R1 = root.data?
+    STR R1, R0, #0 ;; arr[index] = root.data
+
+    ;; index++
+    LDR R0, R5, #6 ;; R0 = index
+    ADD R0, R0, #1 ;; R0 = index + 1
+    STR R0, R5, #6 ;; index = index + 1
+
+    ;; index = PREORDER_TRAVERSAL(root.left, arr, index)
+    ADD R6, R6, #-3 ;; push space for 3 arguments
+    LDR R0, R5, #4 ;; R0 = root
+    LDR R0, R0, #1 ;; R0 = root.left
+    STR R0, R6, #0 ;; pushing 1st arg (root.left) onto stack
+    LDR R0, R5, #5 ;; R0 = arr
+    STR R0, R6, #1 ;; pushing 2nd arg (arr) onto stack
+    LDR R0, R5, #6 ;; R0 = index
+    STR R0, R6, #2 ;; pushing 3rd arg (index) onto stack
+    JSR PREORDER_TRAVERSAL ;; calling function
+    LDR R0, R6, #0 ;; R0 = PREORDER_TRAVERSAL(root.left, arr, index)
+    ADD R6, R6, #4 ;; popping arguments + return from stack 
+    STR R0, R5, #6 ;; index = PREORDER_TRAVERSAL(root.left, arr, index)
+
+    ;; return PREORDER_TRAVERSAL(root.right, arr, index)
+    ADD R6, R6, #-3 ;; push space for 3 arguments
+    LDR R0, R5, #4 ;; R0 = root
+    LDR R0, R0, #2 ;; R0 = root.right
+    STR R0, R6, #0 ;; pushing 1st arg (root.right) onto stack
+    LDR R0, R5, #5 ;; R0 = arr
+    STR R0, R6, #1 ;; pushing 2nd arg (arr) onto stack
+    LDR R0, R5, #6 ;; R0 = index
+    STR R0, R6, #2 ;; pushing 3rd arg (index) onto stack
+    JSR PREORDER_TRAVERSAL ;; calling function
+    LDR R0, R6, #0 ;; R0 = PREORDER_TRAVERSAL(root.right, arr, index)
+    ADD R6, R6, #4 ;; popping arguments + return from stack 
+    STR R0, R5, #3 ;; return value = PREORDER_TRAVERSAL(root.right, arr, index)
+
+
+    TEARDOWN
+    LDR R0, R6, #0 ;; Restore R0
+    LDR R1, R6, #1 ;; Restore R1
+    LDR R2, R6, #2 ;; Restore R2
+    LDR R3, R6, #3 ;; Restore R3
+    LDR R4, R6, #4 ;; Restore R4
+    ADD R6, R5, #0 ;; Pop Saved Regs and LVs
+    LDR R5, R6, #1 ;; Restore Old FP
+    LDR R7, R6, #2 ;; Restore Ret Addr
+    ADD R6, R6, #3 ;; Pop All But Ret Val
     RET
 
 ; Needed to Simulate Subroutine Call in Complx
