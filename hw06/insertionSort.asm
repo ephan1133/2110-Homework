@@ -97,6 +97,7 @@ INSERTION_SORT ;; Do not change this label! Treat this as like the name of the f
     WHILE
     ;; n >= 0 condition
     LDR R3, R5, #-1 ;; R3 = n
+
     BRn END_WHILE
     ;; arr[n] > last_element -> arr[n] - last_element > 0
     LDR R3, R5, #-1 ;; R3 = n
@@ -107,11 +108,13 @@ INSERTION_SORT ;; Do not change this label! Treat this as like the name of the f
     ADD R4, R4, #1 ;; R4 = -last_element
     ADD R3, R3, R4 ;; arr[n] - last_element
     BRnz END_WHILE
+
     ;; arr[n + 1] = arr[n]
     LDR R3, R5, #-1 ;; R3 = n
     ADD R3, R3, R0 ;; R3 = arr[n] address
     LDR R4, R3, #0 ;; R4 = arr[n] value
     STR R4, R3, #1 ;; arr[n + 1] = arr[n]
+    
     ;; n--
     LDR R3, R5, #-1 ;; R3 = n
     ADD R3, R3, #-1 ;; R3 = n - 1
@@ -125,7 +128,6 @@ INSERTION_SORT ;; Do not change this label! Treat this as like the name of the f
     ADD R3, R3, R0 ;; R3 = arr[n + 1] address
     LDR R4, R5, #0 ;; R4 = last_element
     STR R4, R3, #0 ;; arr[n + 1] = last_element
-     
 
     ;; teardown
     TEARDOWN

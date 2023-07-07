@@ -1,12 +1,12 @@
 /**
  * @file my_string.c
- * @author YOUR NAME HERE
+ * @author Eric Phan
  * @collaborators NAMES OF PEOPLE THAT YOU COLLABORATED WITH HERE
  * @brief Your implementation of these famous 3 string.h library functions!
  *
  * NOTE: NO ARRAY NOTATION IS ALLOWED IN THIS FILE
  *
- * @date 2023-03-xx
+ * @date 2023-07-05
  */
 
 #include <stddef.h>
@@ -25,9 +25,12 @@ size_t my_strlen(const char *s)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(s);
-    
-    return 0;
+     UNUSED_PARAM(s);
+    size_t len = 0;
+    while (*s++) {
+        len++;
+    }
+    return len;
 }
 
 /**
