@@ -4,6 +4,7 @@
 
 struct Queue oh_queue;
 
+
 /** enqueue
  * @brief Create a new student and enqueue him
  * onto the OH queue
@@ -18,7 +19,40 @@ int enqueue(const char *studentName, const enum subject topicName, const float q
     UNUSED_PARAM(topicName);
     UNUSED_PARAM(questionNumber);
     UNUSED_PARAM(pub_key);
+    if (oh_queue.stats.no_of_people_in_queue >= MAX_QUEUE_LENGTH || *studentName == '\0') {
+        return FAILURE;
+    }
+    struct Student student; 
+    char *name = student.studentData.name;
+    int i = 1;
+    while (i < MAX_NAME_LENGTH && *studentName != 0) {
+        *name = *studentName;
+        name++;
+        studentName++;
+        i++;
+    }
+    *name = 0;
 
+    student.studentData.topic.topicName = topicName;
+    student.studentData.topic.questionNumber = questionNumber;
+    hash(student.customID, student.studentData.name, pub_key);
+    
+    // if (oh_queue.stats.no_of_people_in_queue == 0) {
+    //     char status[] = "InProgress";
+    //     char *pointerToNewStatus = status;
+    //     char *pointerToCurrentStatus = oh_queue.stats.currentStatus;
+    //     int len = my_strlen(status);
+    //     for (int i = 0; i < len; i++) {
+    //         *pointerToCurrentStatus = *pointerToNewStatus;
+    //         pointerToCurrentStatus++;
+    //         pointerToNewStatus++;
+    //     }
+    // }
+
+    student.queue_number = oh_queue.stats.no_of_people_in_queue;
+    oh_queue.students[oh_queue.stats.no_of_people_in_queue] = student;
+    oh_queue.stats.no_of_people_in_queue++;
+    // oh_queue.stats.no_of_people_visited++;
     return SUCCESS;
 }
 
@@ -27,6 +61,17 @@ int enqueue(const char *studentName, const enum subject topicName, const float q
  * @return FAILURE if the queue is already at empty, SUCCESS otherwise
  */
 int dequeue(void) {
+    if (oh_queue.stats.no_of_people_in_queue == 0) {
+        return FAILURE;
+    }
+    for (int i = 0; i < MAX_QUEUE_LENGTH - 1; i++) {
+        oh_queue.students[i] = oh_queue.students[i + 1];
+    }
+    oh_queue.stats.no_of_people_in_queue--;
+    oh_queue.stats.no_of_people_visited++;
+    // if (oh_queue.stats.no_of_people_in_queue == 0) {
+    //     // call status method
+    // }
     return SUCCESS;
 }
 
@@ -41,7 +86,18 @@ int group_by_topic(struct Topic topic, struct Student *grouped[]) {
     UNUSED_PARAM(topic);
     UNUSED_PARAM(grouped);
 
-    return 0;
+    int counter = 0;
+    struct Topic currTopic;
+    // currTopic.topicName = oh_queue.students[0].studentData.topic.topicName;
+    for (int i = 0; i < MAX_QUEUE_LENGTH; i++) {
+            currTopic.topicName = oh_queue.students[i].studentData.topic.topicName;
+            if (currTopic.topicName == topic.topicName) {
+                *grouped[counter] = oh_queue.students[i];
+                counter++;
+            }
+    }
+
+    return counter;
 }
 
 /** hash
@@ -55,6 +111,13 @@ void hash(int *ciphertext, char *plaintext, struct public_key pub_key) {
     UNUSED_PARAM(plaintext);
     UNUSED_PARAM(pub_key);
 
+    int len = my_strlen(plaintext);
+    char *pointer = plaintext;
+    for (int i = 0; i < len; i++) {
+        *ciphertext = power_and_mod(*pointer, pub_key.e, pub_key.n);
+        pointer++;
+        ciphertext++;
+    }
     return;
 }
 

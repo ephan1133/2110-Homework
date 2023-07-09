@@ -270,20 +270,22 @@ void replace_character_with_string(char *str, char c, char *replaceStr) {
         return;
     }
     // finds first occurrence of char c
+    int holder = 1; // holder is a counter for the i'th occurence that pointer will point to. 
     while (*str != 0) {
-        if (*str == c) {
+        if (*str == c && holder > 0) {
             pointer = str;
+            holder--;
         }
         str++;
     }
     // returns if there is no occurrence of c
     if (pointer == NULL) {
-        return
+        return;
     }
     // handles case where replacement string is length 1
     if (replaceSize == 1) {
         *pointer = *replaceStr;
-        *str = 0
+        *str = 0;
         return;
     }
     // makes space for string to fit into place of replaced character
