@@ -25,7 +25,7 @@ size_t my_strlen(const char *s)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-     UNUSED_PARAM(s);
+    // UNUSED_PARAM(s);
     size_t len = 0;
     while (*s++) {
         len++;
@@ -51,11 +51,18 @@ int my_strncmp(const char *s1, const char *s2, size_t n)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(s1);
-    UNUSED_PARAM(s2);
-    UNUSED_PARAM(n);
+    // UNUSED_PARAM(s1);
+    // UNUSED_PARAM(s2);
+    // UNUSED_PARAM(n);
 
-    return 0;
+    size_t count = 0;
+
+    while (*s1 && *s2 && *s1 == *s2 && count < n) {
+        count++;
+        s2++;
+        s1++;
+    }
+    return *s1 - *s2;
 }
 
 /**
@@ -74,11 +81,21 @@ char *my_strncpy(char *dest, const char *src, size_t n)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(dest);
-    UNUSED_PARAM(src);
-    UNUSED_PARAM(n);
+    // UNUSED_PARAM(dest);
+    // UNUSED_PARAM(src);
+    // UNUSED_PARAM(n);
+
+    char *pointer = dest;
+    for (size_t i = n; i > 0; i--) {
+        *dest = *src;
+        if (*src == 0) {
+            return pointer;
+        }
+        src += sizeof(char);
+        dest +=  sizeof(char);
+    }
     
-    return NULL;
+    return pointer;
 }
 
 /**
@@ -98,11 +115,26 @@ char *my_strncat(char *dest, const char *src, size_t n)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(dest);
-    UNUSED_PARAM(src);
-    UNUSED_PARAM(n);
-    
-    return NULL;
+    // UNUSED_PARAM(dest);
+    // UNUSED_PARAM(src);
+    // UNUSED_PARAM(n);
+
+    char *pointer = dest + my_strlen(dest);
+    for (size_t i = 0; i < n; i++) {
+        if (*src == '\0') {
+            break;
+        }
+        *pointer = *src;
+        pointer++;
+        src++;
+    }
+    size_t index;
+    while (index < n) {
+        *pointer = '\0';
+        pointer++;
+        index++;
+    }
+    return dest;
 }
 
 /**
@@ -122,10 +154,16 @@ void *my_memset(void *str, int c, size_t n)
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(str);
-    UNUSED_PARAM(c);
-    UNUSED_PARAM(n);
+    // UNUSED_PARAM(str);
+    // UNUSED_PARAM(c);
+    // UNUSED_PARAM(n);
     
+    char *pointer = str;
+    for (size_t i = 0; i < n; i++) {
+        *pointer = c;
+        pointer++;
+    }
+
     return NULL;
 }
 
@@ -143,9 +181,27 @@ void remove_first_instance(char *str, char c){
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(str);
-    UNUSED_PARAM(c);
-    
+    // UNUSED_PARAM(str);
+    // UNUSED_PARAM(c);
+    int len = my_strlen(str);
+    int index = 0;
+    if (len == 1) {
+        *(str) = '\0';
+        return;
+    }
+    while (index < len) {
+        if (*(str + index) == c) {
+            break;
+        }
+        index++;
+    }
+    if (index == len) {
+        return;
+    }
+    while (index < len) {
+        *(str + index) = *(str + index + 1);
+        index++;
+    }
     return;
 }
 
@@ -163,9 +219,27 @@ void remove_last_instance(char *str, char c){
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(str);
-    UNUSED_PARAM(c);
-    
+    // UNUSED_PARAM(str);
+    // UNUSED_PARAM(c);
+    int len = my_strlen(str);
+    int index = my_strlen(str) - 1;
+    if (len == 1) {
+        *(str) = '\0';
+        return;
+    }
+    while (index > 0) {
+        if (*(str + index) == c) {
+            break;
+        }
+        index--;
+    }
+        if (index == 0) {
+        return;
+    }   
+    while (index < len) {
+        *(str + index) = *(str + index + 1);
+        index++;
+    }
     return;
 }
 
@@ -184,10 +258,46 @@ void replace_character_with_string(char *str, char c, char *replaceStr) {
     * parameters prior to implementing the function. Once you begin implementing this
     * function, you can delete the UNUSED_PARAM lines.
     */
-    UNUSED_PARAM(str);
-    UNUSED_PARAM(c);
-    UNUSED_PARAM(replaceStr);
-    
+    // UNUSED_PARAM(str);
+    // UNUSED_PARAM(c);
+    // UNUSED_PARAM(replaceStr);
+
+    char *pointer = NULL;
+    int replaceSize = my_strlen(replaceStr);
+    // handles empty string case
+    if (*replaceStr == 0 || replaceSize == 0) {
+        remove_first_instance(str, c);
+        return;
+    }
+    // finds first occurrence of char c
+    while (*str != 0) {
+        if (*str == c) {
+            pointer = str;
+        }
+        str++;
+    }
+    // returns if there is no occurrence of c
+    if (pointer == NULL) {
+        return
+    }
+    // handles case where replacement string is length 1
+    if (replaceSize == 1) {
+        *pointer = *replaceStr;
+        *str = 0
+        return;
+    }
+    // makes space for string to fit into place of replaced character
+    while (str > pointer) {
+       *(str + (replaceSize - 1)) = *str;
+       str--; 
+    }
+    // places the string into the place of the replaced character
+    while (replaceSize > 0) {
+        *pointer = *replaceStr;
+        pointer++;
+        replaceStr++;
+        replaceSize--;
+    }
     return;
 }
 
@@ -204,6 +314,6 @@ void remove_first_character(char **str) {
     * function, you can delete the UNUSED_PARAM lines.
     */
     UNUSED_PARAM(str);
-    
+    (*str)++;
     return;
 }
