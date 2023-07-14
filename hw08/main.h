@@ -31,4 +31,13 @@ struct rectangle {
     int height;
 };
 
+struct obstacle {
+    int row;
+    int col;
+    int length;
+    int height;
+    int speedX;
+    int speedY;
+};
+
 #endif

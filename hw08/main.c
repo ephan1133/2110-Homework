@@ -35,6 +35,12 @@ int main(void) {
   player.height = 8;
   player.length = 8;
 
+  struct obstacle a1;
+  struct obstacle b1;
+  struct obstacle c1;
+  
+
+
   enum gba_state state = START;
   fillScreenDMA(WHITE);
   while (1) {
@@ -72,6 +78,8 @@ int main(void) {
         if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.col < WIDTH - player.length) {
           player.col += 1;
         }
+
+
         // check for collisions somehow
 
 
