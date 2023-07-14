@@ -32,8 +32,8 @@ int main(void) {
   struct rectangle player;
   player.row = 20;
   player.col = 20;
-  player.height = 5;
-  player.length = 5;
+  player.height = 8;
+  player.length = 8;
 
   enum gba_state state = START;
   fillScreenDMA(WHITE);
