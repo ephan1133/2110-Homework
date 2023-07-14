@@ -66,10 +66,10 @@ int main(void) {
         if (KEY_DOWN(BUTTON_DOWN, currentButtons) && player.row < 240) {
           player.row += 1;
         }
-        if (KEY_DOWN(BUTTON_LEFT, currentButtons) && player.row > 0) {
+        if (KEY_DOWN(BUTTON_LEFT, currentButtons) && player.col > 0) {
           player.col -= 1;
         }
-        if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.row < 160) {
+        if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.col < 160) {
           player.col += 1;
         }
         // check for collisions somehow
