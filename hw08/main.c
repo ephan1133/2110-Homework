@@ -55,13 +55,26 @@ int main(void) {
         break;
       case PLAY:
         // logic stuff
+        if (KEY_DOWN(BUTTON_UP, currentButtons)) {
+          player.row -= 1;
+        }
+        if (KEY_DOWN(BUTTON_DOWN, currentButtons)) {
+          player.row += 1;
+        }
+        if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
+          player.col -= 1;
+        }
+        if (KEY_DOWN(BUTTON_RIGHT, currentButtons)) {
+          player.col += 1;
+        }
 
 
 
         // drawing stuff
         drawRectDMA(player.row, player.col, player.length, player.height, BLUE);
 
-        // state = ?
+
+        // change state
         break;
       case WIN:
 
