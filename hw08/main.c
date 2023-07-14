@@ -54,6 +54,9 @@ int main(void) {
         // state = ?
         break;
       case PLAY:
+        // undrawing player
+        drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
+
         // logic stuff
         if (KEY_DOWN(BUTTON_UP, currentButtons)) {
           player.row -= 1;
