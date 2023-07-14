@@ -19,6 +19,7 @@ int enqueue(const char *studentName, const enum subject topicName, const float q
     UNUSED_PARAM(topicName);
     UNUSED_PARAM(questionNumber);
     UNUSED_PARAM(pub_key);
+
     if (oh_queue.stats.no_of_people_in_queue >= MAX_QUEUE_LENGTH || *studentName == '\0') {
         return FAILURE;
     }
@@ -35,24 +36,13 @@ int enqueue(const char *studentName, const enum subject topicName, const float q
 
     student.studentData.topic.topicName = topicName;
     student.studentData.topic.questionNumber = questionNumber;
+    // student.queue_number = oh_queue.stats.no_of_people_in_queue + oh_queue.stats.no_of_people_visited;
     hash(student.customID, student.studentData.name, pub_key);
-    
-    // if (oh_queue.stats.no_of_people_in_queue == 0) {
-    //     char status[] = "InProgress";
-    //     char *pointerToNewStatus = status;
-    //     char *pointerToCurrentStatus = oh_queue.stats.currentStatus;
-    //     int len = my_strlen(status);
-    //     for (int i = 0; i < len; i++) {
-    //         *pointerToCurrentStatus = *pointerToNewStatus;
-    //         pointerToCurrentStatus++;
-    //         pointerToNewStatus++;
-    //     }
-    // }
-
     student.queue_number = oh_queue.stats.no_of_people_in_queue;
     oh_queue.students[oh_queue.stats.no_of_people_in_queue] = student;
     oh_queue.stats.no_of_people_in_queue++;
-    // oh_queue.stats.no_of_people_visited++;
+    oh_queue.stats.no_of_people_visited++;
+    OfficeHoursStatus(&oh_queue.stats);
     return SUCCESS;
 }
 
@@ -64,14 +54,12 @@ int dequeue(void) {
     if (oh_queue.stats.no_of_people_in_queue == 0) {
         return FAILURE;
     }
-    for (int i = 0; i < MAX_QUEUE_LENGTH - 1; i++) {
+    for (int i = 0; i < oh_queue.stats.no_of_people_in_queue - 1; i++) {
         oh_queue.students[i] = oh_queue.students[i + 1];
     }
     oh_queue.stats.no_of_people_in_queue--;
     oh_queue.stats.no_of_people_visited++;
-    // if (oh_queue.stats.no_of_people_in_queue == 0) {
-    //     // call status method
-    // }
+    OfficeHoursStatus(&oh_queue.stats);
     return SUCCESS;
 }
 
@@ -82,21 +70,15 @@ int dequeue(void) {
  * @param grouped an array of pointers to students
  * @return the number of students matched
  */
-int group_by_topic(struct Topic topic, struct Student *grouped[]) { 
-    UNUSED_PARAM(topic);
-    UNUSED_PARAM(grouped);
-
+int group_by_topic(struct Topic topic, struct Student *grouped[]) {
     int counter = 0;
-    struct Topic currTopic;
-    // currTopic.topicName = oh_queue.students[0].studentData.topic.topicName;
-    for (int i = 0; i < MAX_QUEUE_LENGTH; i++) {
-            currTopic.topicName = oh_queue.students[i].studentData.topic.topicName;
-            if (currTopic.topicName == topic.topicName) {
-                *grouped[counter] = oh_queue.students[i];
+    for (int i = 0; i < oh_queue.stats.no_of_people_in_queue; i++) {
+            if (oh_queue.students[i].studentData.topic.topicName == topic.topicName && 
+                oh_queue.students[i].studentData.topic.questionNumber == topic.questionNumber) {
+                grouped[counter] = &oh_queue.students[i];
                 counter++;
             }
     }
-
     return counter;
 }
 
@@ -107,10 +89,6 @@ int group_by_topic(struct Topic topic, struct Student *grouped[]) {
  * @param pub_key public key used for calculating the hash
  */
 void hash(int *ciphertext, char *plaintext, struct public_key pub_key) {
-    UNUSED_PARAM(ciphertext);
-    UNUSED_PARAM(plaintext);
-    UNUSED_PARAM(pub_key);
-
     int len = my_strlen(plaintext);
     char *pointer = plaintext;
     for (int i = 0; i < len; i++) {
@@ -128,9 +106,18 @@ void hash(int *ciphertext, char *plaintext, struct public_key pub_key) {
  * @return FAILURE if no student is matched, SUCCESS otherwise
  */
 int update_student(struct Topic newTopic, int *customID) {
-    UNUSED_PARAM(newTopic);
-    UNUSED_PARAM(customID);
-    
+    int queueSize = oh_queue.stats.no_of_people_in_queue;
+    int found = 0;
+    for (int i = 0; i < queueSize; i++) {
+        int id = *oh_queue.students[i].customID;
+        if (id == *customID) {
+            found = 1;
+            oh_queue.students[i].studentData.topic = newTopic;
+        }
+    }
+    if (found == 0) {
+        return FAILURE;
+    }
     return SUCCESS;
 }
 
@@ -140,7 +127,24 @@ int update_student(struct Topic newTopic, int *customID) {
  * @return FAILURE if no student is matched, SUCCESS otherwise
  */
 int remove_student_by_name(char *name){
-    UNUSED_PARAM(name);
+    int found = 0;
+    int index = 0;
+    for (index = 0; index < oh_queue.stats.no_of_people_in_queue; index++) {
+        if (my_strncmp(name, oh_queue.students[index].studentData.name, my_strlen(oh_queue.students[index].studentData.name)) == 0) {
+            found = 1;
+            break;
+        }
+    }
+    if (found == 0) {
+        return FAILURE;
+    }
+    for (; index < oh_queue.stats.no_of_people_in_queue - 1; index++) {
+        oh_queue.students[index] = oh_queue.students[index + 1];
+    }
+    oh_queue.stats.no_of_people_in_queue--;
+    oh_queue.stats.no_of_people_visited++;
+    OfficeHoursStatus(&oh_queue.stats);
+
 
     return SUCCESS;
 }
@@ -151,8 +155,18 @@ int remove_student_by_name(char *name){
  * @return FAILURE if no student is matched, SUCCESS otherwise
  */
 int remove_student_by_topic(struct Topic topic) {
-    UNUSED_PARAM(topic);
-
+    int counter = 0;
+    for (int i = 0; i < oh_queue.stats.no_of_people_in_queue; i++) {
+            if (oh_queue.students[i].studentData.topic.topicName == topic.topicName && 
+                oh_queue.students[i].studentData.topic.questionNumber == topic.questionNumber) {
+                remove_student_by_name(oh_queue.students[i].studentData.name);
+                i--;
+                counter++;
+            }
+    }
+    if (counter == 0) {
+        return FAILURE;
+    }
     return SUCCESS;
 }
 
@@ -162,9 +176,13 @@ int remove_student_by_topic(struct Topic topic) {
  * @param resultStats A pointer the OfficeHoursStats variable
  * you are to update
  */
-void OfficeHoursStatus(struct OfficeHoursStats* resultStats ){
-    UNUSED_PARAM(resultStats);
-
+void OfficeHoursStatus(struct OfficeHoursStats* resultStats){
+    if (resultStats->no_of_people_in_queue == 0) {
+        resultStats->currentStatus = "Completed";
+    } 
+    if (resultStats->no_of_people_in_queue > 0) {
+        resultStats->currentStatus = "InProgress";
+    }
     return;
 }
 
