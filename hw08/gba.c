@@ -50,7 +50,7 @@ void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
   volatile u16 lcolor = color;
   for (int i = 0; i < height; i++) {
     DMA[3].src = &lcolor;
-    DMA[3].dst = &videoBuffer[OFFSET(row, col, WIDTH)];
+    DMA[3].dst = &videoBuffer[OFFSET(row + i, col, WIDTH)];
     DMA[3].cnt = width | DMA_ON | DMA_SOURCE_FIXED | DMA_DESTINATION_INCREMENT;
   }
 }
@@ -102,9 +102,7 @@ void undrawImageDMA(int row, int col, int width, int height, const u16 *image) {
   This function can be completed using a single DMA call.
 */
 void fillScreenDMA(volatile u16 color) {
-  // TODO: IMPLEMENT
-  UNUSED(color);
-  DMA[3].src = &color
+  DMA[3].src = &color;
   DMA[3].dst = &videoBuffer[0];
   DMA[3].cnt = WIDTH * HEIGHT | DMA_ON | DMA_SOURCE_FIXED | DMA_DESTINATION_INCREMENT;
 

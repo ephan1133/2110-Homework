@@ -30,7 +30,7 @@ int main(void) {
 
   // Load initial application state
   enum gba_state state = START;
-  setPixel(10, 20, RED);
+  fillScreenDMA(WHITE);
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
 
