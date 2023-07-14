@@ -32,8 +32,8 @@ int main(void) {
   struct rectangle player;
   player.row = 20;
   player.col = 20;
-  player.height = 10;
-  player.length = 10;
+  player.height = 5;
+  player.length = 5;
 
   enum gba_state state = START;
   fillScreenDMA(WHITE);
@@ -60,7 +60,7 @@ int main(void) {
 
         // drawing stuff
         drawRectDMA(player.row, player.col, player.length, player.height, BLUE);
-        
+
         // state = ?
         break;
       case WIN:
