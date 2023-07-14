@@ -47,7 +47,7 @@ void setPixel(int row, int col, u16 color) {
   This function can be completed using `height` DMA calls. 
 */
 void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
-  volatile u16 *lcolor = color;
+  volatile u16 *lcolor = &color;
   for (int i = 0; i < height; i++) {
     DMA[3].src = lcolor;
     DMA[3].dst = &videoBuffer[OFFSET(row + i, col, WIDTH)];

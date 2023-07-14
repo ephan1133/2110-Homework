@@ -43,7 +43,7 @@ int main(void) {
     /* TODO: */
     // Manipulate the state machine below as needed //
     // NOTE: Call waitForVBlank() before you draw
-
+    waitForVBlank();
     switch (state) {
       case START:
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
