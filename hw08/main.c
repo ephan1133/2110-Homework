@@ -29,6 +29,12 @@ int main(void) {
   u32 currentButtons = BUTTONS;
 
   // Load initial application state
+  struct rectangle player;
+  player.row = 20;
+  player.col = 20;
+  player.height = 10;
+  player.length = 10;
+
   enum gba_state state = START;
   fillScreenDMA(WHITE);
   while (1) {
@@ -42,12 +48,19 @@ int main(void) {
       case START:
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
           state = PLAY;
+          // draw whatever is needed to start the game (the walls, players, obstacles)
           fillScreenDMA(GRAY);
         }
         // state = ?
         break;
       case PLAY:
+        // logic stuff
 
+
+
+        // drawing stuff
+        drawRectDMA(player.row, player.col, player.length, player.height, BLUE);
+        
         // state = ?
         break;
       case WIN:

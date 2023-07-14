@@ -24,4 +24,11 @@
 *
 */
 
+struct rectangle {
+    int row;
+    int col;
+    int length;
+    int height;
+};
+
 #endif
