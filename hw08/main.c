@@ -40,7 +40,10 @@ int main(void) {
 
     switch (state) {
       case START:
-
+        if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
+          state = PLAY;
+          fillScreenDMA(GRAY);
+        }
         // state = ?
         break;
       case PLAY:
