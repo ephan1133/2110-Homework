@@ -63,13 +63,13 @@ int main(void) {
         if (KEY_DOWN(BUTTON_UP, currentButtons) && player.row > 0) {
           player.row -= 1;
         }
-        if (KEY_DOWN(BUTTON_DOWN, currentButtons) && player.row < 160 - player.height) {
+        if (KEY_DOWN(BUTTON_DOWN, currentButtons) && player.row < HEIGHT - player.height) {
           player.row += 1;
         }
         if (KEY_DOWN(BUTTON_LEFT, currentButtons) && player.col > 0) {
           player.col -= 1;
         }
-        if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.col < 240 - player.length) {
+        if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.col < WIDTH - player.length) {
           player.col += 1;
         }
         // check for collisions somehow
