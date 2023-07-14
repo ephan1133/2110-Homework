@@ -45,6 +45,7 @@ int main(void) {
     // NOTE: Call waitForVBlank() before you draw
 
     switch (state) {
+
       case START:
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
           state = PLAY;
@@ -53,23 +54,25 @@ int main(void) {
         }
         // state = ?
         break;
+
       case PLAY:
         // undrawing player
         drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
 
         // logic stuff
-        if (KEY_DOWN(BUTTON_UP, currentButtons)) {
+        if (KEY_DOWN(BUTTON_UP, currentButtons) && player.row > 0) {
           player.row -= 1;
         }
-        if (KEY_DOWN(BUTTON_DOWN, currentButtons)) {
+        if (KEY_DOWN(BUTTON_DOWN, currentButtons) && player.row < 240) {
           player.row += 1;
         }
-        if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
+        if (KEY_DOWN(BUTTON_LEFT, currentButtons) && player.row > 0) {
           player.col -= 1;
         }
-        if (KEY_DOWN(BUTTON_RIGHT, currentButtons)) {
+        if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.row < 160) {
           player.col += 1;
         }
+        // check for collisions somehow
 
 
 
