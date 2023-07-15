@@ -29,6 +29,7 @@ struct rectangle {
     int col;
     int length;
     int height;
+    int lives;
 };
 
 struct obstacle {
