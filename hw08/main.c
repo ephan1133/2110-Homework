@@ -133,14 +133,12 @@ int main(void) {
       case START:
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
           state = PLAY;
-          // draw whatever is needed to start the game (the walls, players, obstacles)
           fillScreenDMA(GRAY);
         }
-        // state = ?
         break;
 
       case PLAY:
-        // undrawing player
+        // undrawing player & obstacles
         drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
         drawRectDMA(a1.row, a1.col, a1.length, a1.height, GRAY);
         drawRectDMA(a2.row, a2.col, a2.length, a2.height, GRAY);
@@ -153,9 +151,10 @@ int main(void) {
         drawRectDMA(goal.row, goal.height, goal.length, goal.height, GRAY);
 
         // logic stuff
+        // 1st if block checks if player is touching a wall
         if (KEY_DOWN(BUTTON_UP, currentButtons) && player.row > 0) {
           if (obstacleCollision(player, wallOne) || obstacleCollision(player, wallTwo)) {
-            // do nothing
+            // 2nd if block allows player to moves in certain directions when touching a wall
             if (player.col == wallOne.col + wallOne.length || player.row + player.height == wallOne.row ||
             player.col + player.length == wallTwo.col || player.row + player.height == wallTwo.row) {
               player.row -= 1;
@@ -195,6 +194,7 @@ int main(void) {
           }
         }
 
+        // obstacles change directions when they touch the map's boundary
         if (a1.col == WIDTH - a1.length || a1.col == 0) {
           a1.speedX = -a1.speedX;
           a2.speedX = -a2.speedX;
@@ -202,12 +202,15 @@ int main(void) {
           a4.speedX = -a4.speedX;
           a5.speedX = -a5.speedX;
         }
+        
+        // updates obstacle position
         a1.col += a1.speedX;
         a2.col += a2.speedX;
         a3.col += a3.speedX;
         a4.col += a4.speedX;
         a5.col += a5.speedX;
 
+        // player loses life if they touch obstacle. if they lose all their lives, game transitions to lose state
         if (obstacleCollision(player, a1) || 
             obstacleCollision(player, a2) || 
             obstacleCollision(player, a3) || 
@@ -223,8 +226,8 @@ int main(void) {
             }
         }
 
-        // check for win
-        if (player.row <= 16 && player.col >= 224) {
+        // checks if player positon matches goal tile 
+        if (player.row <= goal.row + goal.height && player.col >= goal.col) {
           state = WIN;
           fillScreenDMA(GREEN);
         }
