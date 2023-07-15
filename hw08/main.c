@@ -156,7 +156,8 @@ int main(void) {
         if (KEY_DOWN(BUTTON_UP, currentButtons) && player.row > 0) {
           if (obstacleCollision(player, wallOne) || obstacleCollision(player, wallTwo)) {
             // do nothing
-            if (player.col == wallOne.col || player.col == wallOne.col + wallOne.length || player.row + player.height == wallOne.row) {
+            if (player.col == wallOne.col + wallOne.length || player.row + player.height == wallOne.row ||
+            player.col + player.length == wallTwo.col || player.row + player.height == wallTwo.row) {
               player.row -= 1;
             }
           } else {
@@ -165,7 +166,8 @@ int main(void) {
         }
         if (KEY_DOWN(BUTTON_DOWN, currentButtons) && player.row < HEIGHT - player.height) {
           if (obstacleCollision(player, wallOne) || obstacleCollision(player, wallTwo)) {
-            if (player.col == wallOne.col || player.col == wallOne.col + wallOne.length || player.row == wallOne.row + wallOne.height) {
+            if (player.col == wallOne.col + wallOne.length || player.row == wallOne.row + wallOne.height ||
+            player.col + player.length == wallTwo.col || player.row == wallTwo.row + wallTwo.height) {
               player.row += 1;
             }
           } else {
@@ -174,7 +176,8 @@ int main(void) {
         }
         if (KEY_DOWN(BUTTON_LEFT, currentButtons) && player.col > 0) {
           if (obstacleCollision(player, wallOne) || obstacleCollision(player, wallTwo)) {
-              if (player.col == wallOne.col || player.row == wallOne.row + wallOne.height || player.row + player.height == wallOne.row) {
+              if (player.row == wallOne.row + wallOne.height || player.row + player.height == wallOne.row ||
+              player.col + player.length == wallTwo.col || player.row == wallTwo.row + wallTwo.height || player.row + player.height == wallTwo.row) {
                 player.col -= 1;
               }
           } else {
@@ -183,7 +186,8 @@ int main(void) {
         }
         if (KEY_DOWN(BUTTON_RIGHT, currentButtons) && player.col < WIDTH - player.length) {
           if (obstacleCollision(player, wallOne) || obstacleCollision(player, wallTwo)) {
-              if (player.col == wallOne.col + wallOne.length || player.row == wallOne.row + wallOne.height || player.row + player.height == wallOne.row) {
+              if (player.col == wallOne.col + wallOne.length || player.row == wallOne.row + wallOne.height || player.row + player.height == wallOne.row ||
+              player.row + player.height == wallTwo.row || player.row == wallTwo.row + wallTwo.height) {
                 player.col += 1;
               }
           } else {
@@ -220,7 +224,7 @@ int main(void) {
         }
 
         // check for win
-        if (player.row <= 20 && player.col >= 210) {
+        if (player.row <= 16 && player.col >= 224) {
           state = WIN;
           fillScreenDMA(GREEN);
         }
