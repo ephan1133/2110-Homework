@@ -12,6 +12,7 @@
 #include "images/start_screen.h"
 #include "images/win_screen.h"
 #include "images/lose_screen.h"
+#include "images/obstacle.h"
 /* TODO: */
 // Add any additional states you need for your app. You are not requried to use
 // these specific provided states.
@@ -30,6 +31,102 @@ int obstacleCollision(struct rectangle player, struct obstacle o) {
     player.col <= o.col + o.length;
 }
 
+void intializeAllObjects(struct rectangle *player, struct obstacle *one, struct obstacle *two, struct obstacle *three, struct obstacle *four, struct obstacle *five, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo) {
+  player->row = HEIGHT - 8;
+  player->col = 4;
+  player->height = 8;
+  player->length = 8;
+  player->lives = 3;
+
+  one->row = 130;
+  one->col = 15;
+  one->length = 10;
+  one->height = 10;
+  one->speedX = 1;
+  one->speedY = 1;
+
+  two->row = 105;
+  two->col = 215;
+  two->length = 10;
+  two->height = 10;
+  two->speedX = -1;
+  two->speedY = 1;
+
+  three->row = 80;
+  three->col = 15;
+  three->length = 10;
+  three->height = 10;
+  three->speedX = 1;
+  three->speedY = 1;
+
+  four->row = 55;
+  four->col = 215;
+  four->length = 10;
+  four->height = 10;
+  four->speedX = -1;
+  four->speedY = 1;
+
+  five->row = 30;
+  five->col = 15;
+  five->length = 10;
+  five->height = 10;
+  five->speedX = 1;
+  five->speedY = 1;
+
+  spawn->row = 144;
+  spawn->col = 0;
+  spawn->length = 16;
+  spawn->height = 16;
+  spawn->lives = 0;
+
+  goal->row = 0;
+  goal->col = 224;
+  goal->length = 16;
+  goal->height = 16;
+  goal->lives = 0;
+
+  wallOne->row = 140;
+  wallOne->col = 0;
+  wallOne->length = 210;
+  wallOne->height = 4;
+  wallOne->speedX = 0;
+  wallOne->speedY = 0;
+
+  wallTwo->row = 16;
+  wallTwo->col = 30;
+  wallTwo->length = 210;
+  wallTwo->height = 4;
+  wallTwo->speedX = 0;
+  wallTwo->speedY = 0;
+  
+  return;
+}
+
+void undrawObjects(struct rectangle *player, struct obstacle *a1, struct obstacle *a2, struct obstacle *a3, struct obstacle *a4, struct obstacle *a5, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo) {
+  drawRectDMA(player->row, player->col, player->length, player->height, GRAY);
+  drawRectDMA(a1->row, a1->col, a1->length, a1->height, GRAY);
+  drawRectDMA(a2->row, a2->col, a2->length, a2->height, GRAY);
+  drawRectDMA(a3->row, a3->col, a3->length, a3->height, GRAY);
+  drawRectDMA(a4->row, a4->col, a4->length, a4->height, GRAY);
+  drawRectDMA(a5->row, a3->col, a5->length, a5->height, GRAY);
+  drawRectDMA(wallOne->row, wallOne->col, wallOne->length, wallOne->height, GRAY);
+  drawRectDMA(wallTwo->row, wallTwo->col, wallTwo->length, wallTwo->height, GRAY);
+  drawRectDMA(spawn->row, spawn->col, spawn->length, spawn->height, GRAY);
+  drawRectDMA(goal->row, goal->col, goal->length, goal->height, GRAY);  
+}
+
+void drawObjects(struct rectangle *player, struct obstacle *a1, struct obstacle *a2, struct obstacle *a3, struct obstacle *a4, struct obstacle *a5, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo) {
+  drawRectDMA(a1->row, a1->col, a1->length, a1->height, RED);
+  drawRectDMA(a2->row, a2->col, a2->length, a2->height, RED);
+  drawRectDMA(a3->row, a3->col, a3->length, a3->height, RED);
+  drawRectDMA(a4->row, a4->col, a4->length, a4->height, RED);
+  drawRectDMA(a5->row, a3->col, a5->length, a5->height, RED);
+  drawRectDMA(wallOne->row, wallOne->col, wallOne->length, wallOne->height, WHITE);
+  drawRectDMA(wallTwo->row, wallTwo->col, wallTwo->length, wallTwo->height, WHITE);
+  drawRectDMA(spawn->row, spawn->col, spawn->length, spawn->height, MAGENTA);
+  drawRectDMA(goal->row, goal->col, goal->length, goal->height, GREEN);
+  drawRectDMA(player->row, player->col, player->length, player->height, BLUE);
+}
 int main(void) {
   /* TODO: */
   // Manipulate REG_DISPCNT here to set Mode 3. //
@@ -40,109 +137,30 @@ int main(void) {
 
   // Load initial application state
   struct rectangle player;
-  player.row = HEIGHT - 8;
-  player.col = 4;
-  player.height = 8;
-  player.length = 8;
-  player.lives = 3;
-
   // obstacles 
   struct obstacle a1;
   struct obstacle a2;
   struct obstacle a3;
   struct obstacle a4;
   struct obstacle a5;
-  
-  a1.row = 130;
-  a1.col = 15;
-  a1.length = 10;
-  a1.height = 10;
-  a1.speedX = 1;
-  a1.speedY = 1;
-
-  a2.row = 105;
-  a2.col = 215;
-  a2.length = 10;
-  a2.height = 10;
-  a2.speedX = -1;
-  a2.speedY = 1;
-
-  a3.row = 80;
-  a3.col = 15;
-  a3.length = 10;
-  a3.height = 10;
-  a3.speedX = 1;
-  a3.speedY = 1;
-
-  a4.row = 55;
-  a4.col = 215;
-  a4.length = 10;
-  a4.height = 10;
-  a4.speedX = -1;
-  a4.speedY = 1;
-
-  a5.row = 30;
-  a5.col = 15;
-  a5.length = 10;
-  a5.height = 10;
-  a5.speedX = 1;
-  a5.speedY = 1;
-
   // spawn and winning tiles
   struct rectangle spawn;
   struct rectangle goal;
-
-  spawn.row = 144;
-  spawn.col = 0;
-  spawn.length = 16;
-  spawn.height = 16;
-  spawn.lives = 0;
-
-  goal.row = 0;
-  goal.col = 224;
-  goal.length = 16;
-  goal.height = 16;
-  goal.lives = 0;
-
   // walls
   struct obstacle wallOne;
-  wallOne.row = 140;
-  wallOne.col = 0;
-  wallOne.length = 210;
-  wallOne.height = 4;
-  wallOne.speedX = 0;
-  wallOne.speedY = 0;
-
   struct obstacle wallTwo;
-  wallTwo.row = 16;
-  wallTwo.col = 30;
-  wallTwo.length = 210;
-  wallTwo.height = 4;
-  wallTwo.speedX = 0;
-  wallTwo.speedY = 0;
+
+  intializeAllObjects(&player, &a1, &a2, &a3, &a4, &a5, &goal, &spawn, &wallOne, &wallTwo);
   
   enum gba_state state = START;
   drawFullScreenImageDMA(start_screen);
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
-
-    /* TODO: */
-    // Manipulate the state machine below as needed //
-    // NOTE: Call waitForVBlank() before you draw
     waitForVBlank();
     switch (state) {
 
       case START:
-        drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
-        drawRectDMA(a1.row, a1.col, a1.length, a1.height, GRAY);
-        drawRectDMA(a2.row, a2.col, a2.length, a2.height, GRAY);
-        drawRectDMA(a3.row, a3.col, a3.length, a3.height, GRAY);
-        drawRectDMA(a4.row, a4.col, a4.length, a4.height, GRAY);
-        drawRectDMA(a5.row, a3.col, a5.length, a5.height, GRAY);
-        drawRectDMA(wallOne.row, wallOne.col, wallOne.length, wallOne.height, GRAY);
-        drawRectDMA(wallTwo.row, wallTwo.col, wallTwo.length, wallTwo.height, GRAY);
-        drawRectDMA(spawn.row, spawn.height, spawn.length, spawn.height, GRAY);
-        drawRectDMA(goal.row, goal.height, goal.length, goal.height, GRAY);
+        undrawObjects(&player, &a1, &a2, &a3, &a4, &a5, &goal, &spawn, &wallOne, &wallTwo);
         drawFullScreenImageDMA(start_screen);
         player.row = HEIGHT - 8;
         player.col = 4;
@@ -154,17 +172,8 @@ int main(void) {
         break;
 
       case PLAY:
-        // undrawing player & obstacles
-        drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
-        drawRectDMA(a1.row, a1.col, a1.length, a1.height, GRAY);
-        drawRectDMA(a2.row, a2.col, a2.length, a2.height, GRAY);
-        drawRectDMA(a3.row, a3.col, a3.length, a3.height, GRAY);
-        drawRectDMA(a4.row, a4.col, a4.length, a4.height, GRAY);
-        drawRectDMA(a5.row, a3.col, a5.length, a5.height, GRAY);
-        drawRectDMA(wallOne.row, wallOne.col, wallOne.length, wallOne.height, GRAY);
-        drawRectDMA(wallTwo.row, wallTwo.col, wallTwo.length, wallTwo.height, GRAY);
-        drawRectDMA(spawn.row, spawn.height, spawn.length, spawn.height, GRAY);
-        drawRectDMA(goal.row, goal.height, goal.length, goal.height, GRAY);
+        // undraw objects
+        undrawObjects(&player, &a1, &a2, &a3, &a4, &a5, &goal, &spawn, &wallOne, &wallTwo);
 
         // logic stuff
         // 1st if block checks if player is touching a wall
@@ -246,34 +255,15 @@ int main(void) {
           state = WIN;
         }
 
-        // drawing stuff
-        drawRectDMA(a1.row, a1.col, a1.length, a1.height, RED);
-        drawRectDMA(a2.row, a2.col, a2.length, a2.height, RED);
-        drawRectDMA(a3.row, a3.col, a3.length, a3.height, RED);
-        drawRectDMA(a4.row, a4.col, a4.length, a4.height, RED);
-        drawRectDMA(a5.row, a3.col, a5.length, a5.height, RED);
-        drawRectDMA(wallOne.row, wallOne.col, wallOne.length, wallOne.height, WHITE);
-        drawRectDMA(wallTwo.row, wallTwo.col, wallTwo.length, wallTwo.height, WHITE);
-        drawRectDMA(spawn.row, spawn.col, spawn.length, spawn.height, MAGENTA);
-        drawRectDMA(goal.row, goal.col, goal.length, goal.height, GREEN);
+        drawObjects(&player, &a1, &a2, &a3, &a4, &a5, &goal, &spawn, &wallOne, &wallTwo);
         drawChar(150, 4, player.lives + 48, BLACK);
-        drawRectDMA(player.row, player.col, player.length, player.height, BLUE);
 
         if (KEY_JUST_PRESSED(BUTTON_SELECT, currentButtons, previousButtons)) {
           state = START;
         }
         break;
       case WIN:
-        drawRectDMA(player.row, player.col, player.length, player.height, GRAY);
-        drawRectDMA(a1.row, a1.col, a1.length, a1.height, GRAY);
-        drawRectDMA(a2.row, a2.col, a2.length, a2.height, GRAY);
-        drawRectDMA(a3.row, a3.col, a3.length, a3.height, GRAY);
-        drawRectDMA(a4.row, a4.col, a4.length, a4.height, GRAY);
-        drawRectDMA(a5.row, a3.col, a5.length, a5.height, GRAY);
-        drawRectDMA(wallOne.row, wallOne.col, wallOne.length, wallOne.height, GRAY);
-        drawRectDMA(wallTwo.row, wallTwo.col, wallTwo.length, wallTwo.height, GRAY);
-        drawRectDMA(spawn.row, spawn.col, spawn.length, spawn.height, GRAY);
-        drawRectDMA(goal.row, goal.col, goal.length, goal.height, GRAY);
+        
         drawChar(20, 20, player.lives, BLUE);
         drawFullScreenImageDMA(win_screen);
         drawRectDMA(player.row, player.col, player.length, player.height, BLUE);

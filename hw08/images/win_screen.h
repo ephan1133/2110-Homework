@@ -1,7 +1,7 @@
 /*
  * Exported with nin10kit v1.8
  * Invocation command was nin10kit --mode=3 --resize=240x160 win_screen win_screen.png 
- * Time-stamp: Saturday 07/15/2023, 20:45:15
+ * Time-stamp: Sunday 07/16/2023, 16:46:59
  * 
  * Image Information
  * -----------------

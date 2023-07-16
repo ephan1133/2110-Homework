@@ -41,4 +41,6 @@ struct obstacle {
     int speedY;
 };
 
+void intializeAllObjects(struct rectangle *player, struct obstacle *one, struct obstacle *two, struct obstacle *three, struct obstacle *four, struct obstacle *five, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo);
+
 #endif
