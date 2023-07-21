@@ -13,6 +13,7 @@
 #include "images/win_screen.h"
 #include "images/lose_screen.h"
 #include "images/obstacle.h"
+#include "images/background.h"
 /* TODO: */
 // Add any additional states you need for your app. You are not requried to use
 // these specific provided states.
@@ -103,24 +104,29 @@ void intializeAllObjects(struct rectangle *player, struct obstacle *one, struct 
 }
 
 void undrawObjects(struct rectangle *player, struct obstacle *a1, struct obstacle *a2, struct obstacle *a3, struct obstacle *a4, struct obstacle *a5, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo) {
-  drawRectDMA(player->row, player->col, player->length, player->height, GRAY);
-  drawRectDMA(a1->row, a1->col, a1->length, a1->height, GRAY);
-  drawRectDMA(a2->row, a2->col, a2->length, a2->height, GRAY);
-  drawRectDMA(a3->row, a3->col, a3->length, a3->height, GRAY);
-  drawRectDMA(a4->row, a4->col, a4->length, a4->height, GRAY);
-  drawRectDMA(a5->row, a3->col, a5->length, a5->height, GRAY);
-  drawRectDMA(wallOne->row, wallOne->col, wallOne->length, wallOne->height, GRAY);
-  drawRectDMA(wallTwo->row, wallTwo->col, wallTwo->length, wallTwo->height, GRAY);
-  drawRectDMA(spawn->row, spawn->col, spawn->length, spawn->height, GRAY);
-  drawRectDMA(goal->row, goal->col, goal->length, goal->height, GRAY);  
+  UNUSED(*a1);
+  UNUSED(*a2);
+  UNUSED(*a3);
+  UNUSED(*a4);
+  UNUSED(*a5);
+  drawRectDMA(player->row, player->col, player->length, player->height, BLACK);
+  undrawImageDMA(a1->row, a1->col, a1->length, a1->height, background);
+  undrawImageDMA(a2->row, a2->col, a2->length, a2->height, background);
+  undrawImageDMA(a3->row, a3->col, a3->length, a3->height, background);
+  undrawImageDMA(a4->row, a4->col, a4->length, a4->height, background);
+  undrawImageDMA(a5->row, a3->col, a5->length, a5->height, background);
+  drawRectDMA(wallOne->row, wallOne->col, wallOne->length, wallOne->height, BLACK);
+  drawRectDMA(wallTwo->row, wallTwo->col, wallTwo->length, wallTwo->height, BLACK);
+  drawRectDMA(spawn->row, spawn->col, spawn->length, spawn->height, BLACK);
+  drawRectDMA(goal->row, goal->col, goal->length, goal->height, BLACK);  
 }
 
 void drawObjects(struct rectangle *player, struct obstacle *a1, struct obstacle *a2, struct obstacle *a3, struct obstacle *a4, struct obstacle *a5, struct rectangle *goal, struct rectangle *spawn, struct obstacle *wallOne, struct obstacle *wallTwo) {
-  drawRectDMA(a1->row, a1->col, a1->length, a1->height, RED);
-  drawRectDMA(a2->row, a2->col, a2->length, a2->height, RED);
-  drawRectDMA(a3->row, a3->col, a3->length, a3->height, RED);
-  drawRectDMA(a4->row, a4->col, a4->length, a4->height, RED);
-  drawRectDMA(a5->row, a3->col, a5->length, a5->height, RED);
+  drawImageDMA(a1->row, a1->col, 10, 10, obstacle);
+  drawImageDMA(a2->row, a2->col, a2->length, a2->height, obstacle);
+  drawImageDMA(a3->row, a3->col, a3->length, a3->height, obstacle);
+  drawImageDMA(a4->row, a4->col, a4->length, a4->height, obstacle);
+  drawImageDMA(a5->row, a5->col, a5->length, a5->height, obstacle);
   drawRectDMA(wallOne->row, wallOne->col, wallOne->length, wallOne->height, WHITE);
   drawRectDMA(wallTwo->row, wallTwo->col, wallTwo->length, wallTwo->height, WHITE);
   drawRectDMA(spawn->row, spawn->col, spawn->length, spawn->height, MAGENTA);
@@ -167,7 +173,7 @@ int main(void) {
         player.lives = 3;
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
           state = PLAY;
-          fillScreenDMA(GRAY);
+          fillScreenDMA(BLACK);
         }
         break;
 

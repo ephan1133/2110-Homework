@@ -75,7 +75,7 @@ void drawFullScreenImageDMA(const u16 *image) {
 */
 void drawImageDMA(int row, int col, int width, int height, const u16 *image) {
   for (int i = 0; i < height; i++) {
-    DMA[3].src = &image[OFFSET(i, 0, WIDTH)];
+    DMA[3].src = &image[OFFSET(i, 0, width)];
     DMA[3].dst = &videoBuffer[OFFSET(row + i, col, WIDTH)];
     DMA[3].cnt = width | DMA_ON | DMA_SOURCE_FIXED | DMA_DESTINATION_INCREMENT;
   }
@@ -91,7 +91,7 @@ void undrawImageDMA(int row, int col, int width, int height, const u16 *image) {
   // TODO: IMPLEMENT
   volatile const u16 *limage = image;
   for (int i = 0; i < height; i++) {
-    DMA[3].src = &limage[OFFSET(i, 0, WIDTH)];
+    DMA[3].src = &limage[OFFSET(i, 0, width)];
     DMA[3].dst = &videoBuffer[OFFSET(row + i, col, WIDTH)];
     DMA[3].cnt = width | DMA_ON | DMA_SOURCE_FIXED | DMA_DESTINATION_INCREMENT;
   }
