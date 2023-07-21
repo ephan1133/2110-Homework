@@ -1,3 +1,4 @@
+
 ;; Timed Lab 3, Summer 2023
 ;; For this Timed Lab, you will be given a binary tree.
 ;; Your task will be to modify the tree by making the appropriate subroutine calls.
@@ -98,7 +99,7 @@ ADDALL
 		STR R7, R6, #2  ;; Save Ret Addr
 		STR R5, R6, #1  ;; Save Old FP
 		ADD R5, R6, #0  ;; Set New FP
-		ADD R6, R6, #-6  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
+		ADD R6, R6, #-5  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
 		STR R0, R6, #0  ;; Save R0
 		STR R1, R6, #1  ;; Save R1
 		STR R2, R6, #2  ;; Save R2
@@ -107,34 +108,22 @@ ADDALL
 
 		;; code
 
-		LDR R0, R5, #0 ;; R0 = sum
 		AND R0, R0, #0 ;; R0 = 0;
-		STR R0, R5, #0 ;; sum = 0
+		LDR R1, R5, #4 ;; R1 = num
+		BRnz ENDLOOP
+		AND R2, R2, #0 ;; R2 = 0
+		ADD R2, R2, #1 ;; R2 = i = 1
+		NOT R1, R1
+		ADD R1, R1, #1 ;; R1 = -num
+		LOOP
+		ADD R0, R0, R2 ;; sum + i
+		ADD R2, R2, #1 ;; i++
+		ADD R4, R2, R1 ;; i - num
+		BRnz LOOP
+		BR ENDLOOP
 
-		LDR R1, R5, #-1 ;; R1 = i
-		AND R1, R1, #0 ;; R1 = 0
-		ADD R1, R1, #1 ;; R1 = 1
-		STR R1, R5, #-1 ;; i = 1
-		FORLOOP
-		LDR R1, R5, #-1 ;; R1 = i
-		LDR R2, R5, #4 ;; R2 = num
-		NOT R2, R2 
-		ADD R2, R2, #1 ;; R2 = -num
-		ADD R1, R1, R2 ;; i - num
-		BRp ENDFOR
-
-		LDR R0, R5, #0 ;; R0 = sum
-		LDR R1, R5, #-1 ;; R1 = i
-		ADD R0, R0, R1 ;; R0 = sum + i
-		STR R0, R5, #0 ;; sum = sum + i
-
-		ADD R1, R1, #1 ;; R1 = i + 1
-		STR R1, R5, #-1 ;; i = i + 1
-		BR FORLOOP
-
-		ENDFOR
-		LDR R0, R5, #0 ;; R0 = sum
-		STR R0, R5, #3 ;; store sum into return
+		ENDLOOP
+		STR R0, R5, #3 ;; storing sum into return slot
 
 		LDR R0, R6, #0 ;; Restore R0
 		LDR R1, R6, #1 ;; Restore R1
@@ -180,7 +169,7 @@ CHANGETREE
 		STR R7, R6, #2  ;; Save Ret Addr
 		STR R5, R6, #1  ;; Save Old FP
 		ADD R5, R6, #0  ;; Set New FP
-		ADD R6, R6, #-7  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
+		ADD R6, R6, #-5  ;; SET X TO (-4 - NUM LVs) OR -5 IF NOT USING LVs
 		STR R0, R6, #0  ;; Save R0
 		STR R1, R6, #1  ;; Save R1
 		STR R2, R6, #2  ;; Save R2
@@ -189,52 +178,49 @@ CHANGETREE
 
 		;; code
 		LDR R0, R5, #4 ;; R0 = address of node
-		ADD R0, R0, #0 ;; R0 = R0 + 0
 		BRz ENDIFSTATE
-		LDR R0, R0, #0 ;; R0 = node.data
-		STR R0, R5, #0 ;; int data = mem[node]
+		LDR R0, R0, #0 ;; R4 = node.data
 
-		LDR R0, R5, #0 ;; R0 = data
 		AND R0, R0, #1 ;; check if data is even
-		BRnp ODD
+		BRz ZERO
+		BR ODD
 		;; even
+		ZERO
 		ADD R6, R6, #-1 ;; push space on stack
-		LDR R0, R5, #0 ;; R0 = data
+		LDR R0, R5, #4 ;; R0 = node
+		LDR R0, R0, #0 ;; R0 = node.data
 		STR R0, R6, #0 ;; data onto stack
 		JSR FIBONACCI
-		LDR R0, R6, #0 ;; get return value from stack
+		LDR R1, R6, #0 ;; get return value from stack
 		ADD R6, R6, #2 ;; pop args
-		LDR R1, R5, #4 ;; R1 = node
-		;; LDR R1, R1, #0 ;; mem[node] ????????????????????
-		STR R0, R1, #0 ;; mem[node] = fib
+		LDR R0, R5, #4 ;; R0 = node
+		STR R1, R0, #0 ;; mem[node] = fib
+		BR LEFT
 
 
 		ODD
 		ADD R6, R6, #-1 ;; push space on stack
-		LDR R0, R5, #0 ;; R0 = data
+		LDR R0, R5, #4 ;; R0 = node
+		LDR R0, R0, #0 ;; R0 = node.data
 		STR R0, R6, #0 ;; data onto stack
 		JSR ADDALL
-		LDR R0, R6, #0 ;; get return value from stack
+		LDR R1, R6, #0 ;; get return value from stack
 		ADD R6, R6, #2 ;; pop args
-		LDR R1, R5, #4 ;; R1 = node
-		;; LDR R1, R1, #0 
-		STR R0, R1, #0 ;; mem[node] = addall
+		LDR R0, R5, #4 ;; R0 = node
+		STR R1, R0, #0 ;; mem[node] = addall
+		BR LEFT
 
-
+		LEFT
 		LDR R0, R5, #4 ;; R0 = node
 		LDR R0, R0, #1 ;; R0 = mem[node + 1]
-		STR R0, R5, #-1 ;; left = R0
 		ADD R6, R6, #-1 ;; push space on stack
-		LDR R0, R5, #-1 ;; R0 = left
 		STR R0, R6, #0 ;; store on stack
 		JSR CHANGETREE
 		ADD R6, R6, #2 ;; pop args
 
 		LDR R0, R5, #4 ;; R0 = node
-		LDR R0, R0, #2 ;; R0 = mem[node + 1]
-		STR R0, R5, #-2 ;; right = R0
+		LDR R0, R0, #2 ;; R0 = mem[node + 2]
 		ADD R6, R6, #-1 ;; push space on stack
-		LDR R0, R5, #-2 ;; R0 = right
 		STR R0, R6, #0 ;; store on stack
 		JSR CHANGETREE
 		ADD R6, R6, #2 ;; pop args
@@ -248,7 +234,6 @@ CHANGETREE
 		ADD R0, R0, #-1 ;; R0 = -1
 		STR R0, R5, #3 ;; -1 in return value
 		BR TD
-
 
 		TD
 		LDR R0, R6, #0 ;; Restore R0
